@@ -1,4 +1,15 @@
 # Active-Directory-Home-Lab-
+Requirments: 
+</br> Download, configuration and installation of...
+</br> - Windows 10 (VM) 
+</br> - Kali Linux (VM)
+</br> - Ubuntu Server
+</br> - Windows Server 2022
+</br> - Virtual Box
+</br> - Splunk
+</br> - Sysmon
+
+
 This project displays how to
 </br>
 <h2>Creating a Logical Diagram:</h2>
