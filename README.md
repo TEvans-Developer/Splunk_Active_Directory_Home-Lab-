@@ -85,4 +85,42 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 </br>![Screenshot (204)](https://github.com/user-attachments/assets/7e9cae7e-0feb-464c-a011-a4201f466bcf)
 
 
+</br>10.) We now will create a knew directory called "share", then mount the shared folder onto the directory called share with this command. 
 
+</br> sudo mount -t vboxsf -o uid=1000,gid=1000 <shared_folder_name> share/
+
+</br>![Screenshot (205)](https://github.com/user-attachments/assets/eae659ca-050b-4eb6-a78a-64c200337539)
+
+
+</br>11.) After we will cd into the share folder we created and ls -la to see all the shared folder including the splunk .deb package. We will then use the command to install the splunk package into the machine. " sudo dpkg -i splunk <tab> to do the rest. Hit enter and wait until it is completed.
+
+</br>![Screenshot (207)](https://github.com/user-attachments/assets/74672a0b-e5b2-4f42-9706-cff6ddf340d8)
+
+</br> splunk will be located in the /opt/splunk directory, cd the and ls -la to see that the user and group belongs to splunk. Change into the user splunk by typing sudo -u splunk bash. We will cd into bin directory and used the binary command "./splunk start". Hit Q and Y to accept user agreements and input a username and password. 
+
+</br> When installation is complete use this command to make sure splunk starts up evertime VM reboots. We want to exit from the splunk user "exit" command. We will then "cd bin" as our user into our bin and then type "sudo ./splunk enable boot-start -user splunk".
+
+
+</br>1.) We will open our target windows machine and rename the PC to target-pc, by type pc in search bar and clicking properties. We will then "Rename this pc" to target-pc, next and restart the vm. 
+
+</br>2) Go to cmd to check ip, ipconfig and change IP for this machine as needed. We will need to change the machines IP by right clicking the network icon, click open net. and intenet setting, ethernet, change adaptor options, right click adaptor, click properties, and double click the internet protocol version 4 or properties.
+
+</br> click "use the following IP address and input the assigned IP we made in the diagram. IP of 192.168.10.100 A subnet of 255.255.255.0 and a defualt gateway of 192.168.10.1, DNS server 8.8.8.8 and hit okay. Re-check IP. 
+
+</br>
+
+</br> Go to the internet browser to go to our splunk server listening on 192.168.10.10:8000 (splunk server must be up)
+
+</br> We will install splunk universial forwarder on the target vm. Go to splunk.com on the vm and download the Splunk Universal Forwarder as a Windows-64 bit package ( must be signed into account). 
+
+</br> Double click the download packages and agree to the license agreement, make sure "An on-premises Splunk Enterprise instance" box is selected, hit next > user name left as admin and random generated password selected. Skip deploying server, receiving indexer should be the splunk server 192.10.10.10 : 9997,  then install. 
+
+</br> We will download sysmon from micrsoft, with sysmon configuration by olaf on GitHub, find sysmonconfig.xml, click raw, save as, and save in download directory on vm machine. Go to downloads and extract all from Sysmon zip folder. 
+
+</br> https://github.com/olafhartong/sysmon-modular
+
+</br>Open and copy the file explorer bar of the extract folder and go to Powershell (run as admin). Cd into the copied file and type .\Sysmon64.exe -i ..\sysmonconfig.xml. Hit agree to install sysmon.
+
+</br> We will then instruct splunk forworder on what we want to send over to our splunk server. Configure file called "inputs.conf" found at "This PC" , Local C drive, program files, splunk universal forwarder, etc, system, default. Copy the inputs.conf file, make a new file under the local directory of system files . Do not edit the inputs.conf under the default directory. 
+
+</br> Open notepad as admin, from the github  https://github.com/MyDFIR/Active-Directory-Project , copy and paste the "inputconfig"  file into your notepad. Take note of the " index=endpoint ". Save as 
