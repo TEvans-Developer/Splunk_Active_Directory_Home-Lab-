@@ -107,7 +107,11 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 
 </br> click "use the following IP address and input the assigned IP we made in the diagram. IP of 192.168.10.100 A subnet of 255.255.255.0 and a defualt gateway of 192.168.10.1, DNS server 8.8.8.8 and hit okay. Re-check IP. 
 
-</br>
+</br>![Screenshot (208)](https://github.com/user-attachments/assets/142ad808-d8f9-4d16-bd14-f62cf55570f8)
+
+</br>![Screenshot (210)](https://github.com/user-attachments/assets/7d1c60e4-dfe5-4436-b907-020f2dc989f6)
+
+
 
 </br> Go to the internet browser to go to our splunk server listening on 192.168.10.10:8000 (splunk server must be up)
 
@@ -121,6 +125,47 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 
 </br>Open and copy the file explorer bar of the extract folder and go to Powershell (run as admin). Cd into the copied file and type .\Sysmon64.exe -i ..\sysmonconfig.xml. Hit agree to install sysmon.
 
+</br>![Screenshot (211)](https://github.com/user-attachments/assets/5a150081-a3d4-4bb9-bf48-a6e0be222898)
+
+
 </br> We will then instruct splunk forworder on what we want to send over to our splunk server. Configure file called "inputs.conf" found at "This PC" , Local C drive, program files, splunk universal forwarder, etc, system, default. Copy the inputs.conf file, make a new file under the local directory of system files . Do not edit the inputs.conf under the default directory. 
 
-</br> Open notepad as admin, from the github  https://github.com/MyDFIR/Active-Directory-Project , copy and paste the "inputconfig"  file into your notepad. Take note of the " index=endpoint ". Save as 
+</br> Open notepad as admin, from the github  https://github.com/MyDFIR/Active-Directory-Project , copy and paste the "inputconfig"  file into your notepad. Take note of the " index=endpoint ". Save as "inputs.conf" under the profile files > universal forwarders > etc, system, local as a "all files" for the "Save as type". Save
+
+</br>![Screenshot (212)](https://github.com/user-attachments/assets/659407bd-a5f0-4675-a703-0991cb536413)
+
+</br> We will now restart splunks universal forwarders service. Search up services, run as admin, type "s" to find "splunk forwarder services". When this is found you should see NT Service under the splunk forwarder services tab "Log on As". Click on the splunk forwarder service. Select local system account, then hit "okay" after the message appears. You will now notice the "Log on As" is now " local system" on splunk service. You will also notice the sysmon64 is running under it. 
+
+</br> Right-click splunk forwarder, click restart, clcik okay after services message, then click start to start the services. 
+
+</br>![Screenshot (213)](https://github.com/user-attachments/assets/ffaa713a-50e0-474f-9df0-2fbf240d8abf)
+
+</br>![Screenshot (214)](https://github.com/user-attachments/assets/0617a36e-7af1-48cc-8147-5d45d258e648)
+
+</br>![Screenshot (215)](https://github.com/user-attachments/assets/fb843392-1dbb-4556-882c-ef6669d4a511)
+
+</br> We will not go to our splunk enterprise via the browser on the Windows Machine at 192.168.10.10:8000 and login using the same credentials to log in with our splunk server. We then navigate to the settings tab and click on "Indexes". This is where we will create the index "endpoint" for the input.conf file to send indexes to. 
+
+</br> Click New index on the top right. Then type "endpoint" as the Index Name and save. Double check by scrolling down.
+
+</br>![Screenshot (216)](https://github.com/user-attachments/assets/b9c908b3-fb4a-42b4-bc57-0e38d136f5d5)
+
+
+</br>![Screenshot (217)](https://github.com/user-attachments/assets/75e2e816-7d42-4be7-b536-d431d10bcdff)
+
+</br> We will now make sure the splunk server receives the data. Settings, Forwarding and Receiving, configure receiving, new recieving port, and type 9997 and save. Once set up, click app to on the top left nav bar. Go to search and reporting , skip, skip tour and type in the Search bar , " index=endpoint" with a time frame of "last 24 hours". You will see different events happening on the system that have been recorded.
+
+</br>![Screenshot (218)](https://github.com/user-attachments/assets/278f66cf-38ed-4875-bdef-4a7b86940174)
+
+
+</br>You will see in the host tab we have our "target-pc"
+
+</br>![Screenshot (219)](https://github.com/user-attachments/assets/0d5ac2c2-3c2a-4436-a1ed-31e9bbfffeb9)
+
+
+</br>You will also see the sources and source type, where our inputs.conf and its specified security, system, application and sysmon data. 
+
+</br>![Screenshot (220)](https://github.com/user-attachments/assets/95f06fcc-220a-4cc0-88e8-02bce23a698b)
+
+
+
