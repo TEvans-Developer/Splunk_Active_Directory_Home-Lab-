@@ -19,7 +19,7 @@ I will be using a drawing diagram called draw.io. This will be used to visualize
 
 </br>Server: Active Directory will have an IP: 192.168.10.7 , Splunk Universal Forwarder and Sysmon 
 
-</br>Target: Windows 10 , IP: DHCP, Splunk Universal Forwader, Atomic Red Team and Sysmon
+</br>Target: Windows 10 , IP: 192.168.10.100, Splunk Universal Forwader, Atomic Red Team and Sysmon
 
 </br>Attacker: Kali Linux, 192.168.10.25
 
