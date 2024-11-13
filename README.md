@@ -222,5 +222,109 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 
 </br> ![Screenshot (235)](https://github.com/user-attachments/assets/5686a43b-ce8b-47f4-8e8c-dfbde2fd41d3)
 
+<h2>Perform Brute force attack with Kali linux, Set up and install Atomic Red Team </h2>
+
+</br>Log into kali machine to set up static ip of 192.168.10.250 per diagram. Select the eternet icon on the top right of the screen and select "edit connections". Select the first wire connection > IPv4 setting. If set to DHCP change to manuel, add then type in for IP: 192.168.10.250, Netmask : 24, Gateway : 192.168.10.1, DNS servers: 8.8.8.8, then save.
+
+</br> open a terminal and type in the command "ip a". You may notice the ip did not change yet. Go to the ethernet connection icon on the type right of screen, disconnect it and then reconnect to the wired connection. Type is "ip a" in the terminal again and youll see it have changed to 192.168.10.250. Try pinging to google and the splunk server to verify connectivity. 
+
+</br>![Screenshot (236)](https://github.com/user-attachments/assets/41729346-de96-4e40-8c25-fbde9e44b30a)
+
+
+</br>![Screenshot (237)](https://github.com/user-attachments/assets/55bdfd4b-0fbd-414c-92df-52a57201e596)
+
+</br> Update and upgrade repository using the command "sudo apt-get update && sudo apt-get upgrade -y"
+
+</br> cd into the Desktop directory (cd Desktop) and make a directory (mkdir) called "ad-project"
+
+</br> We then was to "sudo apt-get install -y crowbar". Crowbar is a brute force tool used to perform attacks on services like RDP, SSH or other protocols that require authentication by using dictionarys for the brute force attack. 
+
+</br>![Screenshot (238)](https://github.com/user-attachments/assets/19fe1e6c-e523-4966-9515-3d0b832ba54f)
+
+
+</br>Kali linux comes with wordlist that can be used in brute force attacks, we can cd into the /usr/share/wordlists/ and ls to see the different word list. Here we will be using the wordlist rockyou.txt.gz
+
+</br>Unzip the rockyou.txt.gz file using gunzip. "sudo gunzip rockyou.txt.gz". When completed ls the to see that the rockyou.txt.gz is no longer red and is now rockyou.txt
+
+</br>![Screenshot (240)](https://github.com/user-attachments/assets/86b93e6f-6d6d-4312-a4fe-e3b03ce27f4c)
+
+</br> We will no copy the rockyou.txt file into the ad-project folder we created with command. cp rockyou.txt ~/Desktop/ad-porject. Then cd into the ad-project and ls -lh in the folder. 
+
+</br> rockyou.txt will display a file size of 134M. We will use the first 20 lines using the command "head -n 20" and  > it to a file called passwords.txt. We then will nano into the passwords.txt file and at the bottom put in our password for the 
+windows target machine. This is done to show how the brute force will work. 
+
+</br>![Screenshot (242)](https://github.com/user-attachments/assets/4445d10f-292e-47ed-bd4c-b272aa29790d)
+
+
+<h2>Enable RDP on Windows machine</h2>
+
+</br> Sign in the windows machine as one of the users. Type pc in the search bar, right click to go to properties and go to advanced settings and log in with the administrator account. 
+
+</br> Go to the remote tab and under remote desktop go to allow remote connections to this computer. Click add to add terry and jenny smith as the users. Click ok, ok, apply and ok to finish.
+
+</br>![Screenshot (243)](https://github.com/user-attachments/assets/89c24773-fd2d-45d0-86b3-eb102ffcae4a)
+
+</br> Go back to the linux machine and use the command "crowbar -b rdp -u jsmith -C passwords.txt -s 192.168.10.100/32
+
+</br> -b to specify our service (rdp) , -u to specify the user (jsmith), -C for the pass word list (passwords.txt) -s to specify the source IP ( 192.168.10.100/32). /32 is used at the end of the IP as a cidr notation to specify we are only using this single IP 
+
+</br>![Screenshot (244)](https://github.com/user-attachments/assets/cd481cfe-7f6f-421c-a64b-e04befa5d80b)
+
+</br>Crowbar should now find a password that matches the user name we provided. 
+
+</br> On the windows machine go to the splunk instance to observe it telemetry. 
+
+</br> Go to search and reporting, type in "index=endpoint jsmith" and change the duration to last 15 minutes to see the event related to our brute force attack. Go to "event code". Here you will see an event id of 4625 with a count of 21 (on yours it should say 20, i added two extra passwords). 
+
+</br> Searching for event on our web browser "event id 4625" will return us " a security event that indicates that the user account failed to log on"
+
+</br> In splunk selecting the event id will auto update our search bar, upon scroll throught the events you will notice that the times for the log in our occuring at the same time , indicating a brute force attack. 
+
+</br> If we change the EventCode to  4624, we will see the successful login that crowbar made to the account as well as the login we made into the vm to access it.
+
+</br>![Screenshot (249)](https://github.com/user-attachments/assets/f2e32391-7288-444d-a9dd-d35837c252c8)
+
+
+</br>![Screenshot (251)](https://github.com/user-attachments/assets/c9fef855-73ac-4110-a5ed-5c3724f244af)
+
+</br>![Screenshot (247)](https://github.com/user-attachments/assets/d761107f-8200-4900-9e48-91ef6ff4b217)
+
+
+</br> When we click on the "Show all 70 lines" it will show more information regarding the event. It will also show use the kali machine in which the login was made and its ip of 192.168.10.250
+
+</br>![Screenshot (255)](https://github.com/user-attachments/assets/3d852183-781b-4d1d-aa68-3cb74f2fd38a)
+
+
+</br>![Screenshot (253)](https://github.com/user-attachments/assets/26a97577-6335-4303-be24-4362d9876010)
+
+<h2>Install Atomic Red Team</h2>
+
+</br> Open powershell with admin priv., log in as admin and type the command "Set-ExecutionPolicy Bypass CurrentUser" ,hit enter, type "Y" then enter again.
+
+</br> ![Screenshot (256)](https://github.com/user-attachments/assets/4388c68e-82a2-4a34-9166-47d8c571f8a4)
+
+
+</br>Set exclusion for the entire C drive so Microsoft Defenders doesnt remove some files from atomic red team.
+
+
+</br> Click the bottom up arrow and click window security, virus and threat protection, go to manage settings. At the bottom, under exclusions, click add or remove exclusion, select folder and select "This pc", select our c drive and click select folder, re log in as admin and you will see the exclusion.
+
+</br>![Screenshot (257)](https://github.com/user-attachments/assets/432dc566-b4bf-4b18-a736-8929a7ce6b48)
+
+
+</br> Now we will go to powershell again and install atomic red team.  Type in the command in the screen shot. Then Type "y" , enter to continue after downloaded. Then go to the AtomicRedTeam folder in "This PC" > Local Dick (C:) 
+
+</br>![Screenshot (258)](https://github.com/user-attachments/assets/2c7c3599-d35e-419b-a76b-d0da63e0efcc)
+
+</br>![Screenshot (259)](https://github.com/user-attachments/assets/986925e3-b8da-4b35-bc73-bb93eda2dabd)
+
+</br> Click the AtomicRedTeam folder and click "atomics" which will map back to technique ids from the MITRE ATT&K framework.
+
+</br> If you go to the MITRE ATT&CK framework you can go to the  Matrix for Enterprise, you can highlight any of time and see the Technique which might be under the atomics folder. We can use the T1136.001 technique which is a persistence tactic on the local account which is also available in the atomics folder. This technique allows "creates account"
+
+
+
+
+
 
 
