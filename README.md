@@ -168,4 +168,27 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 </br>![Screenshot (220)](https://github.com/user-attachments/assets/95f06fcc-220a-4cc0-88e8-02bce23a698b)
 
 
+</br>We will do the same steps that we did on the windows machine onto the windows server.  Hint( If you try to connect to the splunk server and it is not listening, go the the server an input the command , "systemctl status <nameofservice>" to check the status, if services status is "-1/FAILURE" we need to type in the command, "sudo systemctl restart <nameofservice>" to restart the service, re-check the status, it should now be running)
+
+</br>![Screenshot (222)](https://github.com/user-attachments/assets/8d5ce4de-6347-4bf1-af4a-1ea25bd337aa)
+
+<h2> Install and Configure Active Directory; Promote Domain Controller</h2>
+
+</br>We will log into our windows server machine and click on the server manager. Here we will click on manage at the top right. We will go through the prompt to click next on the "Before you begin page, enable "Role-based or feature-based installation" then click next, select the ADDC (should only be one), click next, We want to select the Active directory Domain Services" button and continue to move forward click next until it is installed ( Configuration required installion seucceded on ADDC01) when finished.
+
+</br>![Screenshot (223)](https://github.com/user-attachments/assets/a4e6723f-3662-449b-9e5c-02c4888f711f)
+
+</br>Go back to the service manager and click the flag icon. Here you will notice "promote this server to a domain controller", click this option. 
+
+</br> We will then click "Add a new forest" and give our Domain a name with a top level domain. (e.g ADHomeLab.local). Continue through prompt, provide a password, next>, NetBIOS domain name will appear, click the empty bar and continue. In the "Paths" part, it will show paths to store database files (NTDS , SYSVOL). These are common files that can be a clear indicator a system is compromised . Click next until  prerequisites check out and installation is completed. Server should restart and our new sign in screen should show a back slash indicating we installed ADDC and promoted server to a DC. 
+
+</br>![Screenshot (224)](https://github.com/user-attachments/assets/b174310b-34fd-4922-9ae2-75b4e7b30870)
+
+</br>![Screenshot (226)](https://github.com/user-attachments/assets/60a44149-4e50-4251-9c8b-86a789fe8a53)
+
+</br>![Screenshot (227)](https://github.com/user-attachments/assets/885163c7-7185-4a7f-9712-577c3e6cd486)
+
+</br>![Screenshot (228)](https://github.com/user-attachments/assets/adaad8df-ac80-47bd-9ee8-14c582218fb8)
+
+</br> We will now create users, log into server and go to service manager. We will click on tools on the top right corner and select "active directory users and computers". Click the domain, go to builtin and right click on the right hand side, click new, click group and 
 
