@@ -190,5 +190,34 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 
 </br>![Screenshot (228)](https://github.com/user-attachments/assets/adaad8df-ac80-47bd-9ee8-14c582218fb8)
 
-</br> We will now create users, log into server and go to service manager. We will click on tools on the top right corner and select "active directory users and computers". Click the domain, go to builtin and right click on the right hand side, click new, click group and 
+</br> We will now create users, log into server and go to service manager. We will click on tools on the top right corner and select "active directory users and computers". Click the domain, go to builtin and right click on the right hand side, click new, click group and give the group a name. Click OK. Double Click the test group that was just made then click member of and click add. We will now add administrators then click okay. 
+
+</br> Right click domain > new > click "Organizational Unit" to create a department called "IT"
+
+</br>![Screenshot (229)](https://github.com/user-attachments/assets/05b381e8-3da1-4ffb-8f1c-352402d36558)
+
+
+</br>![Screenshot (230)](https://github.com/user-attachments/assets/43129498-8e7a-4b28-ab83-ab2424c93301)
+
+</br> We will now right click the OU to create a new user and name them Jenny Smith and username will be jsmith. We will also uncheck the "user must change password at next logon" because this is simply a lab environment. Give the user a simple password then hit next, then finish. 
+
+</br>We will continue the same steps to create new OU (HR) and new user (Terry Smith, tsmith and a password for the user).
+
+</br>![Screenshot (231)](https://github.com/user-attachments/assets/c56c44d9-9fe6-4bee-92d5-8816dbc7aef3)
+
+
+</br>![Screenshot (232)](https://github.com/user-attachments/assets/46ff4e15-6ce9-46ac-ace6-f0517b0e4482)
+
+</br> We will now go to the windows target machine and join it to our new domain we created and authenticate it with jenny smith's account. 
+
+</br> On the windows 10 machine go to pc > properties > advance system settings >computer name >change > select domain > and type in you domain name. If presented with error go to network and internet setting, change adaptor options,right click adaptor, select properties and click IPv4 and change our DNS to our Domain contoller (192.168.10.7). Then click ok.
+
+</br>![Screenshot (233)](https://github.com/user-attachments/assets/dba78761-73e0-4717-87dc-0bcc08c56805)
+
+</br>![Screenshot (234)](https://github.com/user-attachments/assets/366dded3-e298-4926-bf85-36345c2bab72)
+
+</br> Return back to naming the domain and click ok. We then will input the administrator and password of the server which will have the proper permissions. A Welcome message should appear and a restart should appear. 
+
+</br>We will now login with jenny smith. select other user and restart, make sure the domain is the one we created. We will use jsmith and password and we will be able to login. 
+
 
