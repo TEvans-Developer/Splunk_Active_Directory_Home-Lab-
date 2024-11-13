@@ -220,4 +220,7 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 
 </br>We will now login with jenny smith. select other user and restart, make sure the domain is the one we created. We will use jsmith and password and we will be able to login. 
 
+</br> ![Screenshot (235)](https://github.com/user-attachments/assets/5686a43b-ce8b-47f4-8e8c-dfbde2fd41d3)
+
+
 
