@@ -320,8 +320,28 @@ windows target machine. This is done to show how the brute force will work.
 
 </br> Click the AtomicRedTeam folder and click "atomics" which will map back to technique ids from the MITRE ATT&K framework.
 
-</br> If you go to the MITRE ATT&CK framework you can go to the  Matrix for Enterprise, you can highlight any of time and see the Technique which might be under the atomics folder. We can use the T1136.001 technique which is a persistence tactic on the local account which is also available in the atomics folder. This technique allows "creates account"
+</br> If you go to the MITRE ATT&CK framework you can go to the  Matrix for Enterprise, you can highlight any of time and see the Technique which might be under the atomics folder. We can use the T1136.001 technique which is a persistence tactic on the local account which is also available in the atomics folder. This technique allows you to "create account"
 
+</br>![Screenshot (260)](https://github.com/user-attachments/assets/719f8483-88d6-4423-97de-9b1f02021f0a)
+
+</br>![Screenshot (261)](https://github.com/user-attachments/assets/2d191564-afa3-4d7a-81f8-58dba3922c1f)
+
+</br> You will type in the command in powershell as admin. "Invoke-AtomicTest T1136.001" (if not working re-install with the command within the photo above). 
+
+</br> Once complete a NewLocaclUser should have been created and deleted by the atomic test script. Go into splunk and type in the search bar for NewLocalUser events. 
+
+</br>![Screenshot (262)](https://github.com/user-attachments/assets/6492e8c8-241c-4409-88f2-f471a7d9a44c)
+
+
+</br>![Screenshot (263)](https://github.com/user-attachments/assets/acad31db-7c88-43de-b1a8-d521e5f58f32)
+
+
+</br> If we try the execution by pass technique T1059.001 our Microsoft Defender should pop up. The events will also be visible in splunk. If events in splunk do not pop up until a few seconds later there could be a gap in security.
+
+</br>![Screenshot (264)](https://github.com/user-attachments/assets/453d679d-2e69-4c25-ab4a-58b151ad84b0)
+
+
+</br>![Screenshot (265)](https://github.com/user-attachments/assets/9ed405e8-fcfb-439c-b657-7d39b792f3a7)
 
 
 
