@@ -1,6 +1,9 @@
 # Active-Directory-Home-Lab-
+<h2> Objective:</h2>
+The objective of this project is to build practical SOC, System Administrator and DFIR skills. In this project shows how to install and configure a Windows 10 machine as a target machine, Active Directory Domain Controller on a Windows 2022 Server for Active Directory(AD), Splunk service running on an Ubuntu Server and Kali Linux as an attack machine. In this project the AD is created and managed on the Domain Control (DC); users, groups and organizational units (OUs) that had access to the windows 10 machine. Both Windows 2022 Server and Windows 10 machines were intergrated with Splunk universal forwarders to receive indexers from events and logs on the endpoint that could be viewed on Splunk alerts and Sysmon to monitor telmetry. This project also demonstrates different attacks such as brute force attacks from a kali linux machine and MITRE ATT&CK framwork to test system security using Atomic Red Team (ART) by Red Canary. These alerts and events can also be analyze via Splunk.
+
 Requirments: 
-</br> Download, configuration and installation of...
+</br> Download, configuration, integration and installation of...
 </br> - Windows 10 (VM) 
 </br> - Kali Linux (VM)
 </br> - Ubuntu Server
@@ -8,10 +11,11 @@ Requirments:
 </br> - Virtual Box
 </br> - Splunk
 </br> - Sysmon
+</br> - Atomic Red Team
+</br> - Active Directory
+</br> - Domain Controller
 
 
-This project displays how to
-</br>
 <h2>Creating a Logical Diagram:</h2>
 I will be using a drawing diagram called draw.io. This will be used to visualize the home lab environment. The home lab will persist of 2 servers, 1 switch, 1 router, 1 target pc, 1 attack machine and a cloud icon to represent the internet and all connection to the appropriate devices. 
 
@@ -32,17 +36,17 @@ I will be using a drawing diagram called draw.io. This will be used to visualize
 I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu Server (iso), and Kali Linux onto the virtual box. Using meaningful naming convictions I provided each machine with the appropriate username, machine/ server names and secure passwords (ie. Admin, splunk etc.)
 
 <h2>Install and Configure Sysmon and Splunk</h2>
-</br> I installed and configure sysmon and splunk on the Windows Machine (target) and Windows Server so they may began collecting telemontry and send logs to the splunk server
+</br> I installed and configure sysmon and splunk on the Windows Machine (target) and Windows Server so they may began collecting telmetry and send logs to the splunk server
 
 </br>1.) First network settings must be set to NAT network to ensuring the virtual machines can be on the same network still have intenet access. 
 
 </br> This can be done by clicking on the 3 bulletin points next to tool in Virtual Box > select "Network" > select "Create". 
 
-</br>Double click the new NAT network that was created and at the bottom under the "General Options" tab provide the NAT network with a name (e.g. "AD-HomeLab") and the IPv4 Prefix will be the establish IP for our network (e.g. 192.168.10.0/24). "Enable DHCP" should be left on and then apply.
+</br>Double click the new NAT network that was created and at the bottom under the "General Options" tab provide the NAT network with a name (e.g. "AD-HomeLab") and the IPv4 prefix will be the established IP for our network (e.g. 192.168.10.0/24). "Enable DHCP" should be left on and then apply.
 
 </br>![Screenshot (196)](https://github.com/user-attachments/assets/1bc5770b-bafb-4934-8128-03d9e86a4046)
 
-</br>2.) Now go into each machine and change the current network setting from NAT to the NATnetwork we just created and click okay to apply to each. 
+</br>2.) Now go into each machine and change the current network setting from NAT to the NAT network we just created and click okay to apply to each. 
 </br>![Screenshot (197)](https://github.com/user-attachments/assets/d2696e26-fbd0-499f-b799-a7febf2e7aa5)
 
 </br>3.) Logging into the splunk server you will notice a that the IP for the server is not true to the diagram that was draw for the lab. We should change the IP of the server by writing the command, "ip addr" to see our IP for the machine, then "sudo nano /etc/netplan/<tab>". Tab will bring you to the file which will allow you to deactiviate DHCP and write a static IP for the machine.  
@@ -67,14 +71,14 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 
 </br>6.) Go to Splunk's website to creat an account and go to products / free downloads to download the .deb enterprise addition (linux) for a splunk server.
 
-</br>7. In the splunk server the command "sudo apt-get install virtualbox" <tab> was type to display options. We are looking for the "virtualbox-guest-additions-iso
+</br>7. In the splunk server the command "sudo apt-get install virtualbox" <tab> was typed to display options. We are looking for the "virtualbox-guest-additions-iso
 . Type Y for yes, then hit enter.
 
 </br>![Screenshot (202)](https://github.com/user-attachments/assets/132094e3-96a3-474f-a539-e8285c8232e8)
 
 </br>8.) On the top of the splunk servers vm , click "Devices" > "Shared Folders" > "Shared Folders settings" > click the add folder icon. We then will find the path to where we downloaded our splunk .deb  and leave the name of the folder as is. Then check all boxes and hit okay. After we will type in the splunk server sudo reboot to reboot the server and log back in. 
 
-</br>9.) We will not input the command "sudo adduser <username> vboxsf. Note.. If "The group 'vboxsf' does not exist" appear. Type in  sudo apt-get install virtualbox <tab> , then find "sudo apt-get install virtualbox-guest-utils"  and install it. Then after installation 'sudo reboot' then log on to re add user again
+</br>9.) We will now input the command "sudo adduser <username> vboxsf. Note.. If "The group 'vboxsf' does not exist" appear. Type in  sudo apt-get install virtualbox <tab> , then find "sudo apt-get install virtualbox-guest-utils"  and install it. Then after installation 'sudo reboot' then log on to re add user again
 
 </br>![Screenshot (202)](https://github.com/user-attachments/assets/8e3e1474-6291-4394-95dd-9a8e893ae032)
 
@@ -85,14 +89,14 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 </br>![Screenshot (204)](https://github.com/user-attachments/assets/7e9cae7e-0feb-464c-a011-a4201f466bcf)
 
 
-</br>10.) We now will create a knew directory called "share", then mount the shared folder onto the directory called share with this command. 
+</br>10.) We now will create a new directory called "share", then mount the shared folder onto the directory called share with this command. 
 
 </br> sudo mount -t vboxsf -o uid=1000,gid=1000 <shared_folder_name> share/
 
 </br>![Screenshot (205)](https://github.com/user-attachments/assets/eae659ca-050b-4eb6-a78a-64c200337539)
 
 
-</br>11.) After we will cd into the share folder we created and ls -la to see all the shared folder including the splunk .deb package. We will then use the command to install the splunk package into the machine. " sudo dpkg -i splunk <tab> to do the rest. Hit enter and wait until it is completed.
+</br>11.) After we will cd into the share folder we created and ls -la to see all the shared folders including the splunk .deb package. We will then use the command to install the splunk package into the machine. " sudo dpkg -i splunk <tab> to do the rest. Hit enter and wait until it is completed.
 
 </br>![Screenshot (207)](https://github.com/user-attachments/assets/74672a0b-e5b2-4f42-9706-cff6ddf340d8)
 
@@ -101,7 +105,7 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 </br> When installation is complete use this command to make sure splunk starts up evertime VM reboots. We want to exit from the splunk user "exit" command. We will then "cd bin" as our user into our bin and then type "sudo ./splunk enable boot-start -user splunk".
 
 
-</br>1.) We will open our target windows machine and rename the PC to target-pc, by type pc in search bar and clicking properties. We will then "Rename this pc" to target-pc, next and restart the vm. 
+</br>1.) We will open our target windows machine and rename the PC to target-pc, by typing pc in search bar and clicking properties. We will then "Rename this pc" to target-pc, next and restart the vm. 
 
 </br>2) Go to cmd to check ip, ipconfig and change IP for this machine as needed. We will need to change the machines IP by right clicking the network icon, click open net. and intenet setting, ethernet, change adaptor options, right click adaptor, click properties, and double click the internet protocol version 4 or properties.
 
@@ -117,9 +121,9 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 
 </br> We will install splunk universial forwarder on the target vm. Go to splunk.com on the vm and download the Splunk Universal Forwarder as a Windows-64 bit package ( must be signed into account). 
 
-</br> Double click the download packages and agree to the license agreement, make sure "An on-premises Splunk Enterprise instance" box is selected, hit next > user name left as admin and random generated password selected. Skip deploying server, receiving indexer should be the splunk server 192.10.10.10 : 9997,  then install. 
+</br> Double click the download packages and agree to the license agreement, make sure "An on-premises Splunk Enterprise instance" box is selected, hit next > user name left as admin and random generated password selected. Skip deploying servers, the receiving indexer should be the splunk server 192.10.10.10 : 9997, then install. 
 
-</br> We will download sysmon from micrsoft, with sysmon configuration by olaf on GitHub, find sysmonconfig.xml, click raw, save as, and save in download directory on vm machine. Go to downloads and extract all from Sysmon zip folder. 
+</br> We will download sysmon from microsoft, with sysmon configuration by olaf on GitHub, find sysmonconfig.xml, click raw, save as, and save in download directory on vm machine. Go to downloads and extract all from Sysmon zip folder. 
 
 </br> https://github.com/olafhartong/sysmon-modular
 
@@ -128,7 +132,7 @@ I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu S
 </br>![Screenshot (211)](https://github.com/user-attachments/assets/5a150081-a3d4-4bb9-bf48-a6e0be222898)
 
 
-</br> We will then instruct splunk forworder on what we want to send over to our splunk server. Configure file called "inputs.conf" found at "This PC" , Local C drive, program files, splunk universal forwarder, etc, system, default. Copy the inputs.conf file, make a new file under the local directory of system files . Do not edit the inputs.conf under the default directory. 
+</br> We will then instruct splunk forwarder on what we want to send over to our splunk server. Configure file called "inputs.conf" found at "This PC" , Local C drive, program files, splunk universal forwarder, etc, system, default. Copy the inputs.conf file, make a new file under the local directory of system files . Do not edit the inputs.conf under the default directory. 
 
 </br> Open notepad as admin, from the github  https://github.com/MyDFIR/Active-Directory-Project , copy and paste the "inputconfig"  file into your notepad. Take note of the " index=endpoint ". Save as "inputs.conf" under the profile files > universal forwarders > etc, system, local as a "all files" for the "Save as type". Save
 
@@ -344,7 +348,9 @@ windows target machine. This is done to show how the brute force will work.
 </br>![Screenshot (265)](https://github.com/user-attachments/assets/9ed405e8-fcfb-439c-b657-7d39b792f3a7)
 
 
-
-
-
+Reference Material: 
+https://www.youtube.com/@MyDFIR
+https://attack.mitre.org/
+https://github.com/olafhartong/sysmon-modular
+https://github.com/redcanaryco/atomic-red-team
 
