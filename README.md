@@ -1,4 +1,4 @@
-# Active-Directory-Home-Lab-
+# Splunk/ Active-Directory Home-Lab
 <h2> Objective:</h2>
 The objective of this project is to build practical SOC, System Administrator and DFIR skills. In this project shows how to install and configure a Windows 10 machine as a target machine, Active Directory Domain Controller on a Windows 2022 Server for Active Directory(AD), Splunk service running on an Ubuntu Server and Kali Linux as an attack machine. In this project the AD is created and managed on the Domain Control (DC); users, groups and organizational units (OUs) that had access to the windows 10 machine. Both Windows 2022 Server and Windows 10 machines were intergrated with Splunk universal forwarders to receive indexers from events and logs on the endpoint that could be viewed on Splunk alerts and Sysmon to monitor telmetry. This project also demonstrates different attacks such as brute force attacks from a kali linux machine and MITRE ATT&CK framwork to test system security using Atomic Red Team (ART) by Red Canary. These alerts and events can also be analyze via Splunk.
 
