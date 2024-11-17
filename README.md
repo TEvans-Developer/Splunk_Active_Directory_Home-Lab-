@@ -33,7 +33,7 @@ I will be using a drawing diagram called draw.io. This will be used to visualize
 
 <h2>Installation of Virtual Machine</h2>
 
-I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu Server (iso), and Kali Linux onto the virtual box. Using meaningful naming convictions I provided each machine with the appropriate username, machine/ server names and secure passwords (ie. Admin, splunk etc.)
+I installed vitrual box, a Windows 10 (iso), Windows 2022 Server (iso), Ubuntu Server (iso), and Kali Linux onto the virtual box. Using meaningful naming convictions, I provided each machine with the appropriate usernames, machine/ server names and secure passwords (ie. Admin, splunk etc.)
 
 <h2>Install and Configure Sysmon and Splunk</h2>
 </br> I installed and configure sysmon and splunk on the Windows Machine (target) and Windows Server so they may began collecting telmetry and send logs to the splunk server
